@@ -4,19 +4,29 @@ import { api } from './api.js';
 import { Loading, ToastProvider } from './ui.jsx';
 import Home from './marketing/Home.jsx';
 import Auth from './pages/Auth.jsx';
+import Verify from './pages/Verify.jsx';
+import SampleReport from './pages/SampleReport.jsx';
 
 const Shell = lazy(() => import('./pages/Shell.jsx'));
 
 function ScrollTop() {
-  const { pathname } = useLocation();
-  useEffect(() => { window.scrollTo(0, 0); }, [pathname]);
+  const { pathname, hash } = useLocation();
+  useEffect(() => {
+    if (hash) {
+      // Wait a frame so the target section exists, then scroll to it (respecting reduced motion via CSS).
+      const id = decodeURIComponent(hash.slice(1));
+      const t = setTimeout(() => { const el = document.getElementById(id); if (el) el.scrollIntoView(); else window.scrollTo(0, 0); }, 30);
+      return () => clearTimeout(t);
+    }
+    window.scrollTo(0, 0);
+  }, [pathname, hash]);
   return null;
 }
 
 export default function App() {
   const [session, setSession] = useState(undefined); // undefined = loading, null = signed out
   const refresh = useCallback(async () => {
-    try { setSession(await api.get('/api/me')); } catch { setSession(null); }
+    try { setSession((await api.get('/api/session')) || null); } catch { setSession(null); }
   }, []);
   useEffect(() => { refresh(); }, [refresh]);
 
@@ -25,6 +35,8 @@ export default function App() {
       <ScrollTop />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/verify" element={<Verify />} />
+        <Route path="/sample-report" element={<SampleReport />} />
         <Route path="/login" element={session ? <Navigate to="/app" replace /> : <Auth mode="login" onAuthed={refresh} />} />
         <Route path="/signup" element={session ? <Navigate to="/app" replace /> : <Auth mode="signup" onAuthed={refresh} />} />
         <Route

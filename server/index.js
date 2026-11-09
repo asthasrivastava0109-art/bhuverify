@@ -9,6 +9,7 @@ import { JURISDICTIONS, CATEGORIES, checkTemplate, jurisdictionFor } from './jur
 import { seedDemo } from './demo.js';
 import { buildReport } from './report.js';
 import registerLand from './land.js';
+import { streamSampleReport } from './sample-report.js';
 
 const app = express();
 app.disable('x-powered-by');
@@ -56,6 +57,9 @@ function getProperty(req, res) {
 }
 const touch = (pid) => db.prepare('UPDATE properties SET updated_at = ? WHERE id = ?').run(now(), pid);
 const parseProp = (p) => ({ ...p, identifiers: JSON.parse(p.identifiers || '{}'), is_demo: !!p.is_demo });
+
+/* ---------- public sample report (invented data only) ---------- */
+app.get('/api/public/sample-report.pdf', (req, res, next) => { try { streamSampleReport(res); } catch (e) { next(e); } });
 
 /* ---------- auth with simple login throttling ---------- */
 const attempts = new Map();
@@ -106,6 +110,16 @@ app.post('/api/auth/logout', wrap((req, res) => {
   res.clearCookie('lv_session', { path: '/' });
   res.json({ ok: true });
 }));
+
+// Same payload as /api/me, but answers 200 with null when signed out, so public pages load without a failed request.
+app.get('/api/session', (req, res) => {
+  const token = req.cookies?.lv_session;
+  const row = token && db.prepare(`SELECT u.id, u.org_id, u.email, u.name, u.role, u.title, s.expires_at FROM sessions s JOIN users u ON u.id = s.user_id WHERE s.token_hash = ?`).get(sha(token));
+  if (!row || row.expires_at < now()) return res.json(null);
+  const org = db.prepare('SELECT id, name FROM orgs WHERE id = ?').get(row.org_id);
+  const { expires_at, ...user } = row;
+  res.json({ user, org });
+});
 
 app.get('/api/me', auth, (req, res) => {
   const org = db.prepare('SELECT id, name FROM orgs WHERE id = ?').get(req.user.org_id);

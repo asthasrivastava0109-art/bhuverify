@@ -17,6 +17,14 @@ For development with hot reload: `npm run dev` (app on :5173, API on :8787).
 Data lives in `./data` (SQLite database plus private `uploads/` and `reports/`). Set `LANDVERIFY_DATA` to move it (the old `BHUVERIFY_DATA` name still works, and an existing `bhuverify.db` is renamed automatically), and `PORT` to change the port.
 Sign up to create a workspace, then choose **Load demonstration property** on the overview to see a finished file. Every record in it is fictional.
 
+## Public site (redesign)
+
+- `/` editorial homepage: animated parcel hero, scroll-driven "fragmented records" and six-step workflow, checks, interactive report preview, audiences, source directory, about/status.
+- `/verify` public land search (district, tehsil, village, Gata). Validated, with loading, empty and error states. It never returns live records: it returns a labelled sample for the demo parcel, or a guided hand-off to the official portals. The data layer is `src/lib/landSearch.js`; add an authorised connector there later.
+- `/sample-report` interactive sample report. `Download PDF` calls `GET /api/public/sample-report.pdf` (needs the Node server; `npm start`). `Print` works anywhere.
+- All sample content lives in `src/marketing/data/sample.js` and is labelled illustrative. No animation library; motion is CSS/SVG and respects `prefers-reduced-motion`.
+- Palette tokens are in `src/styles.css` (`--clay-ink` is the darkened Earth Clay used for text and button fills so it passes contrast).
+
 ## What works
 
 - Accounts, sessions (HttpOnly cookie), password hashing (scrypt), login throttling

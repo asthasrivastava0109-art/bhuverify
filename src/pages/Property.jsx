@@ -83,8 +83,8 @@ function Parcel({ p }) {
       <svg viewBox="0 0 400 260" role="img" aria-label={sourced ? 'Parcel boundary from survey data' : 'Illustrative parcel outline, not from survey data'} style={{ width: '100%', border: '1px solid var(--line)', borderRadius: 8, background: '#fff' }}>
         <defs><pattern id="pg" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M20 0H0V20" fill="none" stroke="#EDEDE8" /></pattern></defs>
         <rect width="400" height="260" fill="url(#pg)" />
-        <polygon points={d} fill="#E8EEF8" fillOpacity=".6" stroke="#174EA6" strokeWidth="2" strokeDasharray={sourced ? '0' : '6 5'} strokeLinejoin="round" pathLength="1000" className="draw" style={{ '--len': 1000, animationDuration: '1.2s' }} />
-        {pts.map((q, i) => <circle key={i} cx={q[0]} cy={q[1]} r="3" fill="#174EA6" className="fade-in" style={{ animationDelay: `${0.8 + i * 0.08}s` }} />)}
+        <polygon points={d} fill="#F7EEE8" fillOpacity=".6" stroke="#9C5532" strokeWidth="2" strokeDasharray={sourced ? '0' : '6 5'} strokeLinejoin="round" pathLength="1000" className="draw" style={{ '--len': 1000, animationDuration: '1.2s' }} />
+        {pts.map((q, i) => <circle key={i} cx={q[0]} cy={q[1]} r="3" fill="#9C5532" className="fade-in" style={{ animationDelay: `${0.8 + i * 0.08}s` }} />)}
       </svg>
       <figcaption className="legend">
         <span><i className={sourced ? '' : 'dash'} />{sourced ? 'Boundary from survey data' : 'Illustrative outline'}</span>

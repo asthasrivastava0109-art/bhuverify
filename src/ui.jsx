@@ -35,9 +35,8 @@ export function Icon({ name, size = 18, stroke = 1.7, className = '', style }) {
 export function Logo({ size = 22 }) {
   return (
     <svg viewBox="0 0 32 32" width={size} height={size} aria-hidden="true">
-      <rect width="32" height="32" rx="7" fill="#174EA6" />
-      <path d="M8 21 L12 9 L24 12 L22 23 Z" fill="none" stroke="#fff" strokeWidth="2" strokeLinejoin="round" />
-      <circle cx="12" cy="9" r="2" fill="#fff" />
+      <rect x="1" y="1" width="30" height="30" rx="7" fill="#292F36" />
+      <path d="M12.5 9.5 L24 12.5 L22 23 L8.5 21.5Z" fill="#B66A45" stroke="#fff" strokeWidth="1.6" strokeLinejoin="round" />
     </svg>
   );
 }
@@ -52,7 +51,7 @@ export const PROV = {
   professional: { label: 'Reviewed by a professional', short: 'Professional review', desc: 'A qualified reviewer recorded their review.' },
 };
 export function ProvMark({ level, size = 16 }) {
-  const c = '#174EA6';
+  const c = '#9C5532';
   return (
     <svg viewBox="0 0 20 20" width={size} height={size} aria-hidden="true">
       {level === 'supplied' && <circle cx="10" cy="10" r="6.5" fill="none" stroke="#6B6B6B" strokeWidth="1.6" />}
